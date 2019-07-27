@@ -44,6 +44,7 @@
           >登录</el-button>
           <el-button @click="resetForm">重置</el-button>
         </el-form-item>
+        <h1>这是login里面的h1</h1>
       </el-form>
     </el-col>
   </el-row>
@@ -98,6 +99,7 @@ export default {
               message: "登录成功",
               type: "success"
             })
+            this.$router.push("/home")
           } else {
             this.$message({
               message: "登录失败",
@@ -115,16 +117,7 @@ export default {
 }
 </script>
 
-<style>
-* {
-  margin: 0;
-  padding: 0;
-}
-html,
-body,
-#app {
-  height: 100%;
-}
+<style scoped>
 .el-row {
   height: 100%;
   background-color: #2d434c;
@@ -133,5 +126,9 @@ body,
   background-color: #fff;
   padding: 20px 30px;
   border-radius: 20px;
+}
+
+h1 {
+  color: red;
 }
 </style>
