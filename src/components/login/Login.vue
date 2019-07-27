@@ -50,6 +50,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+/* eslint-disable */
 export default {
   data () {
     return {
@@ -77,7 +79,32 @@ export default {
       // 再次校验
       // valid  校验通过 true  否则false
       this.$refs.loginForm.validate((valid) => {
-        console.log(valid)
+        // console.log(valid)
+        if (!valid) {
+          this.$message({
+            message: '校验失败',
+            type: 'error',
+            duration: 800
+          })
+          return
+        }
+        // console.log("校验成功");
+        // 发送请求进行校验
+        // 格式：axios.psot(url,data,config)
+        axios.post("http://localhost:8888/api/private/v1/login", this.loginForm).then(res => {
+          // console.log(res);
+          if (res.data.meta.status === 200) {
+            this.$message({
+              message: "登录成功",
+              type: "success"
+            })
+          } else {
+            this.$message({
+              message: "登录失败",
+              type: "error"
+            })
+          }
+        })
       })
     },
     // 重置  将用户名 密码重置为最初的状态
