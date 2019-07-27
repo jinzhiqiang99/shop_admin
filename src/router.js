@@ -4,8 +4,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 // 引入组件
-import Login from './components/Login.vue'
-import Home from './components/Home.vue'
+import Login from './components/login/Login.vue'
+import Home from './components/home/Home.vue'
 
 // 路由模块化后需要使用vue安装
 Vue.use(VueRouter)
@@ -14,14 +14,10 @@ Vue.use(VueRouter)
 const router = new VueRouter({
   // 配置路由规则
   routes: [
-    {
-      path: '/login',
-      component: Login
-    },
-    {
-      path: '/home',
-      component: Home
-    }
+    // 重定向
+    { path: '/', redirect: '/login' },
+    { path: '/login', component: Login },
+    { path: '/home', component: Home }
   ]
 })
 
