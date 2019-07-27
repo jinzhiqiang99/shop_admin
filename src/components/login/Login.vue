@@ -32,8 +32,11 @@
       <el-input v-model="loginForm.password"></el-input>
     </el-form-item>
     <el-form-item>
-      <el-button type="success">登录</el-button>
-      <el-button>重置</el-button>
+      <el-button
+        type="success"
+        @click="startLogin"
+      >登录</el-button>
+      <el-button @click="resetForm">重置</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -43,14 +46,16 @@ export default {
   data () {
     return {
       loginForm: {
-        username: '',
-        password: ''
+        username: 'admin',
+        password: '123456'
       },
       rules: {
+        // 校验用户名
         username: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
           { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
         ],
+        // 校验密码
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
           { min: 5, max: 10, message: '长度在 5 到 10 个字符', trigger: 'blur' }
@@ -59,7 +64,18 @@ export default {
     }
   },
   methods: {
-
+    // 登录
+    startLogin () {
+      // 再次校验
+      // valid  校验通过 true  否则false
+      this.$refs.loginForm.validate((valid) => {
+        console.log(valid)
+      })
+    },
+    // 重置  将用户名 密码重置为最初的状态
+    resetForm () {
+      this.$refs.loginForm.resetFields()
+    }
   }
 }
 </script>
