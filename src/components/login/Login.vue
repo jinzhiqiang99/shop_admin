@@ -44,7 +44,6 @@
           >登录</el-button>
           <el-button @click="resetForm">重置</el-button>
         </el-form-item>
-        <h1>这是login里面的h1</h1>
       </el-form>
     </el-col>
   </el-row>
@@ -93,12 +92,15 @@ export default {
         // 发送请求进行校验
         // 格式：axios.psot(url,data,config)
         axios.post("http://localhost:8888/api/private/v1/login", this.loginForm).then(res => {
+          // 返回的数据包含token 用于验证是否登录了
+          // 将token存在本地
+          localStorage.setItem("token", res.data.data.token)
           // console.log(res);
           if (res.data.meta.status === 200) {
-            this.$message({
-              message: "登录成功",
-              type: "success"
-            })
+            // this.$message({
+            //   message: "登录成功",
+            //   type: "success"
+            // })
             this.$router.push("/home")
           } else {
             this.$message({
