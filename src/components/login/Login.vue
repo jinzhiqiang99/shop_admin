@@ -91,7 +91,7 @@ export default {
         // console.log("校验成功");
         // 发送请求进行校验
         // 格式：axios.psot(url,data,config)
-        axios.post("http://localhost:8888/api/private/v1/login", this.loginForm).then(res => {
+        axios.post("login", this.loginForm).then(res => {
           // 返回的数据包含token 用于验证是否登录了
           // 将token存在本地
           localStorage.setItem("token", res.data.data.token)
