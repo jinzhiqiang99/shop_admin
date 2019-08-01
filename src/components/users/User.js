@@ -68,25 +68,25 @@ export default {
   methods: {
     // 发送请求获取用户列表
     // pagenum = 1  es6 语法给个默认值1
-    getUsersData (pagenum = 1, query = '') {
-      this.$axios
-        .get('users', {
-          params: {
-            query,
-            pagenum,
-            pagesize: 2
-          }
-          // 需要授权的 API ，必须在请求头中使用 Authorization 字段提供 token 令牌
-          // headers: {
-          //   Authorization: localStorage.getItem('token')
-          // }
-        })
-        .then(res => {
-          console.log(res)
-          this.usersData = res.data.data.users
-          this.total = res.data.data.total
-          this.pagenum = res.data.data.pagenum
-        })
+    async getUsersData (pagenum = 1, query = '') {
+      let config = {
+        params: {
+          query,
+          pagenum,
+          pagesize: 2
+        }
+      }
+      let res = await this.$axios.get('users', config)
+      // console.log(res)
+      this.usersData = res.data.data.users
+      this.total = res.data.data.total
+      this.pagenum = res.data.data.pagenum
+      //   .then(res => {
+      //     console.log(res)
+      //     this.usersData = res.data.data.users
+      //     this.total = res.data.data.total
+      //     this.pagenum = res.data.data.pagenum
+      //   })
     },
     // 点击分页
     currentPageChange (curPage) {
@@ -109,50 +109,45 @@ export default {
       this.addUserdDialogVisible = false
     },
     // 点击确定按钮，发送请求，添加数据
-    addUser () {
-      this.$axios.post('users', this.addUserForm).then(res => {
-        // console.log(res)
-        if (res.data.meta.status === 201) {
-          // 刷新页面
-          this.getUsersData(1)
-          // 关闭对话框
-          this.addUserdDialogVisible = false
-          // 清空数据
-          this.$refs.addUserRef.resetFields()
-        }
-      })
+    async addUser () {
+      let res = await this.$axios.post('users', this.addUserForm)
+      console.log(res)
+      if (res.data.meta.status === 201) {
+        // 关闭对话框
+        this.addUserdDialogVisible = false
+        // 清空数据
+        this.$refs.addUserRef.resetFields()
+        // 刷新页面
+        this.getUsersData(1)
+      }
     },
     // 删除用户
-    deleteUser (id) {
+    async deleteUser (id) {
       // console.log(id)
-      this.$axios.delete('users/' + id).then(res => {
-        // console.log(res)
-        if (res.data.meta.status === 200) {
-          this.$message({
-            message: '删除成功',
-            type: 'success',
-            duration: 800
-          })
-        }
-        this.getUsersData(1)
-      })
+      let res = await this.$axios.delete('users/' + id)
+      if (res.data.meta.status === 200) {
+        this.$message({
+          message: '删除成功',
+          type: 'success',
+          duration: 800
+        })
+      }
+      this.getUsersData()
     },
     // 修改用户状态
-    stateChange (id, mgstate) {
+    async stateChange (id, mgstate) {
       // 传过来的是个对象，使用es6的解构语法
       // eslint配置有问题，不能使用下划线
       // const { id, mg_state }=res
       // console.log(id, mgState)
-      this.$axios.put('users/' + id + '/state/' + mgstate).then(res => {
-        console.log(res)
-        if (res.data.meta.status === 200) {
-          this.$message({
-            message: '设置状态成功',
-            type: 'success',
-            duration: 800
-          })
-        }
-      })
+      let res = await this.$axios.put('users/' + id + '/state/' + mgstate)
+      if (res.data.meta.status === 200) {
+        this.$message({
+          message: '设置状态成功',
+          type: 'success',
+          duration: 800
+        })
+      }
     }
   }
 }

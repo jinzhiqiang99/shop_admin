@@ -85,13 +85,17 @@
 export default {
   methods: {
     // 退出
-    loginOut () {
-      this.$confirm('是否退出？', '提示', {
-        confirmButtonText: '确定',
-        cancelBUttonText: '取消',
-        type: 'warning'
-        // 点击确定走then
-      }).then(() => {
+    async loginOut () {
+      // 先打印confirm是不是promise  let res = confirm...
+      // 点击取消会报异常
+      try {
+        await this.$confirm('是否退出？', '提示', {
+          confirmButtonText: '确定',
+          cancelBUttonText: '取消',
+          type: 'warning'
+
+        })
+        console.log('点击了确定')
         this.$message({
           type: 'success',
           message: '已退出',
@@ -101,14 +105,14 @@ export default {
         localStorage.removeItem('token')
         // 回到登录页
         this.$router.push('/login')
-        // 点击取消走catch
-      }).catch(() => {
+      } catch (err) {
+        console.log('点击了取消')
         this.$message({
           type: 'info',
           message: '已取消',
           duration: 800
         })
-      })
+      }
     },
     handleUrlPath () {
       return this.$route.path

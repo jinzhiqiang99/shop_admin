@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 /* eslint-disable */
 export default {
   data () {
@@ -78,7 +78,8 @@ export default {
     startLogin () {
       // 再次校验
       // valid  校验通过 true  否则false
-      this.$refs.loginForm.validate((valid) => {
+      // async 的就近原则
+      this.$refs.loginForm.validate(async (valid) => {
         // console.log(valid)
         if (!valid) {
           this.$message({
@@ -91,24 +92,26 @@ export default {
         // console.log("校验成功");
         // 发送请求进行校验
         // 格式：axios.psot(url,data,config)
-        axios.post("login", this.loginForm).then(res => {
-          // 返回的数据包含token 用于验证是否登录了
-          // 将token存在本地
-          localStorage.setItem("token", res.data.data.token)
-          // console.log(res);
-          if (res.data.meta.status === 200) {
-            // this.$message({
-            //   message: "登录成功",
-            //   type: "success"
-            // })
-            this.$router.push("/home")
-          } else {
-            this.$message({
-              message: "登录失败",
-              type: "error"
-            })
-          }
-        })
+        let res = await this.$axios.post("login", this.loginForm)
+        console.log(res);
+        // .then(res => {
+        // 返回的数据包含token 用于验证是否登录了
+        // 将token存在本地
+        localStorage.setItem("token", res.data.data.token)
+        // console.log(res);
+        if (res.data.meta.status === 200) {
+          // this.$message({
+          //   message: "登录成功",
+          //   type: "success"
+          // })
+          this.$router.push("/home")
+        } else {
+          this.$message({
+            message: "登录失败",
+            type: "error"
+          })
+        }
+        // })
       })
     },
     // 重置  将用户名 密码重置为最初的状态
