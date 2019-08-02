@@ -1,12 +1,10 @@
-<template>
-  <div>roles</div>
+<template src="./Role.html">
+
 </template>
 
-<script>
-export default {
+<script src="./Role.js">
 
-}
 </script>
 
-<style>
+<style src="./Role.less" lang="less">
 </style>

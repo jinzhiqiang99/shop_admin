@@ -59,7 +59,16 @@ export default {
         ]
       },
       // 用户状态
-      value1: true
+      value1: true,
+      // 显示编辑用户
+      dialogEditUserFormVisible: false,
+      // 编辑用户表单
+      EditUserForm: {
+        username: '',
+        email: '',
+        mobile: '',
+        id: ''
+      }
     }
   },
   created () {
@@ -147,6 +156,39 @@ export default {
           type: 'success',
           duration: 800
         })
+      }
+    },
+    // 显示编辑用户对话框
+    showEditUserDialog (row) {
+      // 点击显示编辑用户对话框时使用 slot-scope="scope" 将行对象传过来
+      // console.log(row)
+      this.dialogEditUserFormVisible = true
+      // console.log(this.EditUserForm)
+      this.EditUserForm.username = row.username
+      this.EditUserForm.email = row.email
+      this.EditUserForm.mobile = row.mobile
+      this.EditUserForm.id = row.id
+    },
+    // 点击确定提交编辑用户信息
+    async editUser () {
+      console.log(this.EditUserForm.id)
+      let res = await this.$axios.put('users/' + this.EditUserForm.id, {
+        // 把编辑框中的值传给后台
+        email: this.EditUserForm.email,
+        mobile: this.EditUserForm.mobile
+      })
+      // console.log(res)
+      if (res.data.meta.status === 200) {
+        // 提示修改成功
+        this.$message({
+          message: '修改成功',
+          type: 'success',
+          duration: 800
+        })
+        // 关闭对话框
+        this.dialogEditUserFormVisible = false
+        // 刷新页面
+        this.getUsersData()
       }
     }
   }

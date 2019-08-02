@@ -1,0 +1,13 @@
+.el-row1 {
+  border-bottom: 1px dashed red;
+  margin-top: 10px;
+}
+.el-row1:last-child {
+  border: none;
+}
+.el-row2 {
+  margin-bottom: 10px;
+}
+.tag {
+  margin: 0 3px;
+}
