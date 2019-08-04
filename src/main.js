@@ -13,6 +13,7 @@ import './assets/common.css'
 
 import axios from 'axios'
 Vue.use(ElementUI)
+Vue.config.productionTip = false
 // 设置基准地址
 axios.defaults.baseURL = 'http://localhost:8888/api/private/v1/'
 

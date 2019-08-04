@@ -48,29 +48,25 @@
           text-color="#fff"
           active-text-color="#ffd04b"
         >
-          <el-submenu index="1">
+          <el-submenu
+            v-for="item1 in leftMenuData"
+            :key="item1.id"
+            :index="item1.id+''"
+          >
             <!-- 自定义标题 -->
             <template slot="title">
               <i class="el-icon-location"></i>
-              <span>用户管理</span>
+              <span>{{ item1.authName }}</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="/users">用户列表</el-menu-item>
+              <el-menu-item
+                v-for="item2 in item1.children"
+                :key="item2.id"
+                :index="'/'+item2.path"
+              >{{ item2.authName }}</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
-          <el-submenu index="2">
-            <!-- 自定义标题 -->
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>权限管理</span>
-            </template>
-            <el-menu-item-group>
-              <el-menu-item index="/roles">角色列表</el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item-group>
-              <el-menu-item index="/rights">权限列表</el-menu-item>
-            </el-menu-item-group>
-          </el-submenu>
+
         </el-menu>
       </el-aside>
       <!-- 主体 -->
@@ -83,7 +79,22 @@
 
 <script>
 export default {
+  data () {
+    return {
+      // 保存左侧列表数据
+      leftMenuData: []
+    }
+  },
+  created () {
+    this.loaderLeftMenu()
+  },
   methods: {
+    // 加载左侧菜单列表
+    async loaderLeftMenu () {
+      let res = await this.$axios.get('menus')
+      // console.log(res)
+      this.leftMenuData = res.data.data
+    },
     // 退出
     async loginOut () {
       // 先打印confirm是不是promise  let res = confirm...
@@ -93,7 +104,6 @@ export default {
           confirmButtonText: '确定',
           cancelBUttonText: '取消',
           type: 'warning'
-
         })
         console.log('点击了确定')
         this.$message({
@@ -115,6 +125,9 @@ export default {
       }
     },
     handleUrlPath () {
+      if (this.$route.path === '/goods-add') {
+        return '/goods'
+      }
       return this.$route.path
     }
   }

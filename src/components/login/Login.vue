@@ -93,17 +93,13 @@ export default {
         // 发送请求进行校验
         // 格式：axios.psot(url,data,config)
         let res = await this.$axios.post("login", this.loginForm)
-        console.log(res);
+        // console.log(res);
         // .then(res => {
         // 返回的数据包含token 用于验证是否登录了
         // 将token存在本地
-        localStorage.setItem("token", res.data.data.token)
         // console.log(res);
         if (res.data.meta.status === 200) {
-          // this.$message({
-          //   message: "登录成功",
-          //   type: "success"
-          // })
+          localStorage.setItem("token", res.data.data.token)
           this.$router.push("/home")
         } else {
           this.$message({
